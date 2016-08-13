@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ownCloud Bookmarks</string>
+    <string name ="user_agent">Mozilla/5.0 (Android) ownCloud sample </string>
+</resources>

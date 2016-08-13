@@ -1,0 +1,3 @@
+[submodule "android-library"]
+	path = android-library
+	url = ../../owncloud/android-library
