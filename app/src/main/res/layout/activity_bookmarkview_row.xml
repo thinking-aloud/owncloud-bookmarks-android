@@ -3,30 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/favicon"
+        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight=".1"
+        android:contentDescription="favicon" />
+
     <TextView
         android:id="@+id/title"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:padding="10dp"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/url"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:autoLink="web"
-        android:layout_weight="1" />
-
-    <!--<TextView-->
-        <!--android:id="@+id/description"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_weight="0.5" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/tags"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_weight="1" />-->
 
 </LinearLayout>

@@ -9,24 +9,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class BookmarkRetriever extends AsyncTask<String, Void, String> {
+public class BookmarkDownloader extends AsyncTask<URL, Void, String> {
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(URL... params) {
 
         try {
-            return downloadContent(params[0]);
+            return downloadBookmarks(params[0]);
         } catch (IOException e) {
             return "Unable to retrieve data. URL may be invalid.";
         }
 
     }
 
-    private String downloadContent(String requestUrl) throws IOException {
+    private String downloadBookmarks(URL url) throws IOException {
         InputStream inputStream = null;
 
         try {
-            URL url = new URL(requestUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(10000);
             connection.setConnectTimeout(15000);
@@ -55,15 +54,4 @@ public class BookmarkRetriever extends AsyncTask<String, Void, String> {
         return result.toString();
     }
 
-    @Override
-    protected void onPostExecute(String result) {
-    }
-
-    @Override
-    protected void onPreExecute() {
-    }
-
-    @Override
-    protected void onProgressUpdate(Void... values) {
-    }
 }

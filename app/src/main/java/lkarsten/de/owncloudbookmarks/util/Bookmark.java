@@ -1,32 +1,39 @@
 package lkarsten.de.owncloudbookmarks.util;
 
 
+import android.graphics.Bitmap;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Bookmark {
     private String title;
-    private String url;
+    private URL url;
     private String description;
     private List<String> tags;
+    private Bitmap favicon;
 
-    public Bookmark(JSONObject object) throws JSONException {
+    public Bookmark(JSONObject object) throws JSONException, MalformedURLException, ExecutionException, InterruptedException {
         setTitle(object);
         setUrl(object);
         setDescription(object);
         setTags(object);
+        favicon = new faviconDownloader().execute(url).get();
     }
 
     public void setTitle(JSONObject object) throws JSONException {
         title = object.getString("title");
     }
 
-    public void setUrl(JSONObject object) throws JSONException {
-        url = object.getString("url");
+    public void setUrl(JSONObject object) throws JSONException, MalformedURLException {
+        url = new URL(object.getString("url"));
     }
 
     public void setDescription(JSONObject object) throws JSONException {
@@ -59,7 +66,7 @@ public class Bookmark {
         return title;
     }
 
-    public String getUrl() {
+    public URL getUrl() {
         return url;
     }
 
@@ -67,12 +74,20 @@ public class Bookmark {
         return description;
     }
 
-    public String getTags() {
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public String getTagsAsString() {
         if (tags.isEmpty()) {
             return "";
         } else {
             String tagStr = tags.toString();
             return tagStr.substring(1, tagStr.length() - 1);
         }
+    }
+
+    public Bitmap getFavicon() {
+        return favicon;
     }
 }

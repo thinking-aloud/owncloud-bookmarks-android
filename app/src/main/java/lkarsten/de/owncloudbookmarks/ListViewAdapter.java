@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -15,10 +16,8 @@ public class ListViewAdapter extends BaseAdapter {
 
     public List<Bookmark> list;
     Activity activity;
-    TextView txtFirst;
-    TextView txtSecond;
-//    TextView txtThird;
-//    TextView txtFourth;
+    TextView txtTitle;
+    ImageView imgFavicon;
 
     public ListViewAdapter(Activity activity, List<Bookmark> list) {
         super();
@@ -44,7 +43,6 @@ public class ListViewAdapter extends BaseAdapter {
         return 0;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -54,18 +52,16 @@ public class ListViewAdapter extends BaseAdapter {
 
             convertView = inflater.inflate(R.layout.activity_bookmarkview_row, null);
 
-            txtFirst = (TextView) convertView.findViewById(R.id.title);
-            txtSecond = (TextView) convertView.findViewById(R.id.url);
-//            txtFourth = (TextView) convertView.findViewById(R.id.description);
-//            txtThird = (TextView) convertView.findViewById(R.id.tags);
+            txtTitle = (TextView) convertView.findViewById(R.id.title);
+            imgFavicon = (ImageView) convertView.findViewById(R.id.favicon);
         }
 
         Bookmark map = list.get(position);
 
-        txtFirst.setText(map.getTitle());
-        txtSecond.setText(map.getUrl());
-//        txtFourth.setText(map.getDescription());
-//        txtThird.setText(map.getTags());
+        txtTitle.setText(map.getTitle());
+        imgFavicon.setImageBitmap(map.getFavicon());
+        imgFavicon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
 
         return convertView;
     }
