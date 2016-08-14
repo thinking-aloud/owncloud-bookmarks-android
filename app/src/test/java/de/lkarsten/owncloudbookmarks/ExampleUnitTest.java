@@ -1,4 +1,4 @@
-package lkarsten.de.owncloudbookmarks;
+package de.lkarsten.owncloudbookmarks;
 
 import org.junit.Test;
 
