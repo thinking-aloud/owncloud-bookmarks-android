@@ -34,6 +34,10 @@ public class faviconDownloader extends AsyncTask<URL, Void, Bitmap> {
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
             connection.connect();
+
+            if(connection.getResponseCode() != 200) {
+                return null;
+            }
             inputStream = connection.getInputStream();
 
             return BitmapFactory.decodeStream(inputStream);

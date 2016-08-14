@@ -59,9 +59,11 @@ public class ListViewAdapter extends BaseAdapter {
         Bookmark map = list.get(position);
 
         txtTitle.setText(map.getTitle());
-        imgFavicon.setImageBitmap(map.getFavicon());
-        imgFavicon.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
+        if(map.getFavicon() != null) {
+            imgFavicon.setImageBitmap(map.getFavicon());
+            imgFavicon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        }
 
         return convertView;
     }

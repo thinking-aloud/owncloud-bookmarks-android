@@ -30,7 +30,7 @@ public class BookmarkView extends AppCompatActivity {
         setContentView(R.layout.activity_bookmarkview);
 
         final String BASE_URL = "https://lkarsten.de/owncloud/index.php/apps/bookmarks/public/rest/v1/bookmark";
-        final String request = "?user=test&password=test";
+        final String request = "?user=" + getString(R.string.username) +"&password=" + getString(R.string.password);
 
         try {
             URL url = new URL(BASE_URL + request);

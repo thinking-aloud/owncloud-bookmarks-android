@@ -33,7 +33,11 @@ public class Bookmark {
     }
 
     public void setUrl(JSONObject object) throws JSONException, MalformedURLException {
-        url = new URL(object.getString("url"));
+        String uri =object.getString("url");
+        if (!uri.startsWith("http://") && !uri.startsWith("https://")) {
+            uri = "http://" + uri;
+        }
+        url = new URL(uri);
     }
 
     public void setDescription(JSONObject object) throws JSONException {
@@ -60,6 +64,10 @@ public class Bookmark {
             }
 
         }
+    }
+
+    public void setFavicon(Bitmap favicon) {
+        this.favicon = favicon;
     }
 
     public String getTitle() {
