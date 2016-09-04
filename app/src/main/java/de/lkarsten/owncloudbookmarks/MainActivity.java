@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import de.lkarsten.owncloudbookmarks.view.BookmarkView;
+import de.lkarsten.owncloudbookmarks.activity.BookmarkActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,8 +12,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // load BookmarkView
-        Intent intent = new Intent(this, BookmarkView.class);
+        Intent intent = new Intent(this, BookmarkActivity.class);
         startActivity(intent);
     }
 

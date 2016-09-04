@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">ownCloud Bookmarks</string>
-    <string name ="user_agent">Mozilla/5.0 (Android) ownCloud sample </string>
+
+    <string name="favicon">favicon</string>
+    <string name="sync">sync now</string>
+    <string name="settings">settings</string>
+
+    <string name="server_url">Server URL:</string>
+    <string name="username">username:</string>
+    <string name="password">password:</string>
+    <string name="saveCredentials">Save</string>
+
 </resources>

@@ -6,6 +6,7 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -17,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="de.lkarsten.owncloudbookmarks.view.BookmarkView"></activity>
+        <activity android:name="de.lkarsten.owncloudbookmarks.activity.BookmarkActivity"></activity>
+        <activity android:name="de.lkarsten.owncloudbookmarks.activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

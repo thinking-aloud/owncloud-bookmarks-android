@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import de.lkarsten.owncloudbookmarks.activity.BookmarkActivity;
 import de.lkarsten.owncloudbookmarks.rest.FaviconDownloader;
 import de.lkarsten.owncloudbookmarks.util.AsyncResponse;
-import de.lkarsten.owncloudbookmarks.view.BookmarkView;
 
 public class Bookmark implements AsyncResponse {
 
@@ -95,7 +95,7 @@ public class Bookmark implements AsyncResponse {
         if (bitmap != null) {
             favicon = bitmap;
         }
-        BookmarkView.adapter.notifyDataSetChanged();
+        BookmarkActivity.adapter.notifyDataSetChanged();
     }
 
     public void setFavicon(Bitmap favicon) {

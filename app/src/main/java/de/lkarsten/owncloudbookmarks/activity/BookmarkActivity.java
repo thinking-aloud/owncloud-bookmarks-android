@@ -1,10 +1,14 @@
-package de.lkarsten.owncloudbookmarks.view;
+package de.lkarsten.owncloudbookmarks.activity;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -23,17 +27,28 @@ import de.lkarsten.owncloudbookmarks.rest.BookmarkDownloader;
 import de.lkarsten.owncloudbookmarks.util.BookmarkAdapter;
 import lkarsten.de.owncloudbookmarks.R;
 
-public class BookmarkView extends AppCompatActivity {
+public class BookmarkActivity extends AppCompatActivity {
 
     public static BookmarkAdapter adapter;
+
+    public static final String PREFS_NAME = "ownCloudBookmarkPrefs";
+
+    String server_url;
+    String username;
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bookmarkview);
+        setContentView(R.layout.activity_bookmarks);
 
-        final String BASE_URL = "https://lkarsten.de/owncloud/index.php/apps/bookmarks/public/rest/v1/bookmark";
-        final String request = "?user=" + getString(R.string.username) + "&password=" + getString(R.string.password);
+        loadCredentials();
+
+        final String BASE_URL = server_url + "/index.php/apps/bookmarks/public/rest/v1/bookmark";
+        final String request = "?user=" + username + "&password=" + password;
+
+        System.out.println("BASE_URL: " + BASE_URL);
+        System.out.println("request: " + request);
 
         try {
             URL url = new URL(BASE_URL + request);
@@ -41,6 +56,41 @@ public class BookmarkView extends AppCompatActivity {
         } catch (InterruptedException | ExecutionException | JSONException | MalformedURLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sync:
+                System.out.println("sync clicked");
+                return true;
+            case R.id.settings:
+                showSettingsActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void loadCredentials() {
+        // Restore preferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        server_url = settings.getString("server_url", "");
+        username = settings.getString("username", "");
+        password = settings.getString("password", "");
+    }
+
+    private void showSettingsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     private void showBookmarks(URL url) throws InterruptedException, ExecutionException, JSONException, MalformedURLException {
