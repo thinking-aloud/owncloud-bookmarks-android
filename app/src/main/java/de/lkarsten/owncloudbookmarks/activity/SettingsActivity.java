@@ -13,7 +13,7 @@ public class SettingsActivity extends Activity {
 
     Credentials credentials;
 
-    EditText etServerUrl;
+    EditText etBaseUrl;
     EditText etUsername;
     EditText etPassword;
 
@@ -23,21 +23,21 @@ public class SettingsActivity extends Activity {
 
         setContentView(R.layout.activity_settings);
 
-        etServerUrl = (EditText) findViewById(R.id.et_server_url);
+        etBaseUrl = (EditText) findViewById(R.id.et_base_url);
         etUsername = (EditText) findViewById(R.id.et_username);
         etPassword = (EditText) findViewById(R.id.et_password);
 
         credentials = Credentials.getInstance();
 
-        etServerUrl.setText(credentials.getBaseUrl());
+        etBaseUrl.setText(credentials.getBaseUrl());
         etUsername.setText(credentials.getUsername());
         etPassword.setText(credentials.getPassword());
     }
 
     public void saveCredentials(View view) {
-        String server_url = etServerUrl.getText().toString().trim();
-        if (server_url.length() > 0) {
-            credentials.setBaseUrl(server_url);
+        String baseUrl = etBaseUrl.getText().toString().trim();
+        if (baseUrl.length() > 0) {
+            credentials.setBaseUrl(baseUrl);
         }
 
         String username = etUsername.getText().toString().trim();

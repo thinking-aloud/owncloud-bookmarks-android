@@ -40,7 +40,6 @@ public class BookmarkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmarks);
 
-        loadCredentials();
         loadBookmarks();
     }
 
@@ -60,8 +59,13 @@ public class BookmarkActivity extends AppCompatActivity {
     }
 
     private void loadBookmarks() {
+        loadCredentials();
         String requestUrl = buildRequestUrl();
 
+        fetchBookmarks(requestUrl);
+    }
+
+    private void fetchBookmarks(String requestUrl) {
         try {
             URL url = new URL(requestUrl);
             showBookmarks(url);
@@ -73,6 +77,7 @@ public class BookmarkActivity extends AppCompatActivity {
     private String buildRequestUrl() {
         final String BASE_URL = baseUrl + "/index.php/apps/bookmarks/public/rest/v1/bookmark";
         final String request = "?user=" + username + "&password=" + password;
+
         return BASE_URL + request;
     }
 
