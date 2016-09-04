@@ -2,7 +2,6 @@ package de.lkarsten.owncloudbookmarks.activity;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import de.lkarsten.owncloudbookmarks.dto.Bookmark;
+import de.lkarsten.owncloudbookmarks.dto.Credentials;
 import de.lkarsten.owncloudbookmarks.rest.BookmarkDownloader;
 import de.lkarsten.owncloudbookmarks.util.BookmarkAdapter;
 import lkarsten.de.owncloudbookmarks.R;
@@ -31,9 +31,7 @@ public class BookmarkActivity extends AppCompatActivity {
 
     public static BookmarkAdapter adapter;
 
-    public static final String PREFS_NAME = "ownCloudBookmarkPrefs";
-
-    String server_url;
+    String baseUrl;
     String username;
     String password;
 
@@ -43,19 +41,7 @@ public class BookmarkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bookmarks);
 
         loadCredentials();
-
-        final String BASE_URL = server_url + "/index.php/apps/bookmarks/public/rest/v1/bookmark";
-        final String request = "?user=" + username + "&password=" + password;
-
-        System.out.println("BASE_URL: " + BASE_URL);
-        System.out.println("request: " + request);
-
-        try {
-            URL url = new URL(BASE_URL + request);
-            showBookmarks(url);
-        } catch (InterruptedException | ExecutionException | JSONException | MalformedURLException e) {
-            e.printStackTrace();
-        }
+        loadBookmarks();
     }
 
     @Override
@@ -65,11 +51,36 @@ public class BookmarkActivity extends AppCompatActivity {
         return true;
     }
 
+    private void loadCredentials() {
+        Credentials credentials = Credentials.getInstance();
+
+        baseUrl = credentials.getBaseUrl();
+        username = credentials.getUsername();
+        password = credentials.getPassword();
+    }
+
+    private void loadBookmarks() {
+        String requestUrl = buildRequestUrl();
+
+        try {
+            URL url = new URL(requestUrl);
+            showBookmarks(url);
+        } catch (InterruptedException | ExecutionException | JSONException | MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String buildRequestUrl() {
+        final String BASE_URL = baseUrl + "/index.php/apps/bookmarks/public/rest/v1/bookmark";
+        final String request = "?user=" + username + "&password=" + password;
+        return BASE_URL + request;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sync:
-                System.out.println("sync clicked");
+                loadBookmarks();
                 return true;
             case R.id.settings:
                 showSettingsActivity();
@@ -77,15 +88,6 @@ public class BookmarkActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void loadCredentials() {
-        // Restore preferences
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-
-        server_url = settings.getString("server_url", "");
-        username = settings.getString("username", "");
-        password = settings.getString("password", "");
     }
 
     private void showSettingsActivity() {
