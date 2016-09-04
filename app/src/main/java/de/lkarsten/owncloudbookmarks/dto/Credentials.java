@@ -56,7 +56,7 @@ public class Credentials {
 
     public void setPassword(String password) {
         Credentials.password = password;
-        updateSettings("username", password);
+        updateSettings("password", password);
     }
 
     private void updateSettings(String key, String value) {
