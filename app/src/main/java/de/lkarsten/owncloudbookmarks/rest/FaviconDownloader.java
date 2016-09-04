@@ -10,18 +10,28 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class faviconDownloader extends AsyncTask<URL, Void, Bitmap> {
+import de.lkarsten.owncloudbookmarks.util.AsyncResponse;
+
+public class FaviconDownloader extends AsyncTask<URL, Void, Bitmap> {
+    private AsyncResponse delegate = null;
+
+    public FaviconDownloader(AsyncResponse asyncResponse) {
+        this.delegate = asyncResponse;
+    }
 
     @Override
     protected Bitmap doInBackground(URL... params) {
-
         try {
             return downloadFavicon(params[0]);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+    }
 
+    @Override
+    protected void onPostExecute(Bitmap result) {
+        delegate.processFinish(result);
     }
 
     private Bitmap downloadFavicon(URL url) throws IOException {

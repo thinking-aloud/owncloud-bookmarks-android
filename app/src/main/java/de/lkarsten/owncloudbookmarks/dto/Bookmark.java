@@ -1,4 +1,4 @@
-package de.lkarsten.owncloudbookmarks.util;
+package de.lkarsten.owncloudbookmarks.dto;
 
 
 import android.graphics.Bitmap;
@@ -13,21 +13,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import de.lkarsten.owncloudbookmarks.rest.faviconDownloader;
+import de.lkarsten.owncloudbookmarks.rest.FaviconDownloader;
+import de.lkarsten.owncloudbookmarks.util.AsyncResponse;
+import de.lkarsten.owncloudbookmarks.view.BookmarkView;
 
-public class Bookmark {
+public class Bookmark implements AsyncResponse {
+
     private String title;
     private URL url;
     private String description;
     private List<String> tags;
     private Bitmap favicon;
 
+
     public Bookmark(JSONObject object) throws JSONException, MalformedURLException, ExecutionException, InterruptedException {
         setTitle(object);
         setUrl(object);
         setDescription(object);
         setTags(object);
-        favicon = new faviconDownloader().execute(url).get();
+        setFaviconAsync(url);
+    }
+
+    public Bookmark(String title) {
+        this.title = title;
+    }
+
+    public Bookmark(String title, URL url, Bitmap favicon) {
+        this.title = title;
+        this.url = url;
+        this.favicon = favicon;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setTitle(JSONObject object) throws JSONException {
@@ -68,6 +86,18 @@ public class Bookmark {
         }
     }
 
+    void setFaviconAsync(URL url) {
+        new FaviconDownloader(this).execute(url);
+    }
+
+    @Override
+    public void processFinish(Bitmap bitmap) {
+        if (bitmap != null) {
+            favicon = bitmap;
+        }
+        BookmarkView.adapter.notifyDataSetChanged();
+    }
+
     public void setFavicon(Bitmap favicon) {
         this.favicon = favicon;
     }
@@ -100,4 +130,5 @@ public class Bookmark {
     public Bitmap getFavicon() {
         return favicon;
     }
+
 }

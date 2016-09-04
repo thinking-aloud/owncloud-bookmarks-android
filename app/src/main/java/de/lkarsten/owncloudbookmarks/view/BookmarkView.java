@@ -16,15 +16,16 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import de.lkarsten.owncloudbookmarks.dto.Bookmark;
 import de.lkarsten.owncloudbookmarks.rest.BookmarkDownloader;
-import de.lkarsten.owncloudbookmarks.util.Bookmark;
-import de.lkarsten.owncloudbookmarks.util.ListViewAdapter;
+import de.lkarsten.owncloudbookmarks.util.BookmarkAdapter;
 import lkarsten.de.owncloudbookmarks.R;
 
 public class BookmarkView extends AppCompatActivity {
+
+    public static BookmarkAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,29 +41,24 @@ public class BookmarkView extends AppCompatActivity {
         } catch (InterruptedException | ExecutionException | JSONException | MalformedURLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void showBookmarks(URL url) throws InterruptedException, ExecutionException, JSONException, MalformedURLException {
-        // get bookmarks
         final String response = new BookmarkDownloader().execute(url).get();
 
-        // convert to json
         final JSONArray json = new JSONArray(response);
 
-        // Json to list
-        final List<Bookmark> list = jsonToList(json);
+        final ArrayList<Bookmark> bookmarks = jsonToArrayList(json);
 
-        final ListView listView = (ListView) findViewById(R.id.listView);
+        adapter = new BookmarkAdapter(this, bookmarks);
 
-        final ListViewAdapter adapter = new ListViewAdapter(this, list);
+        ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-                Uri uri = Uri.parse(list.get(position).getUrl().toString());
+                Uri uri = Uri.parse(bookmarks.get(position).getUrl().toString());
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(browserIntent);
             }
@@ -70,12 +66,13 @@ public class BookmarkView extends AppCompatActivity {
         });
     }
 
-    private List<Bookmark> jsonToList(JSONArray json) throws JSONException, MalformedURLException, ExecutionException, InterruptedException {
-        final List<Bookmark> list = new ArrayList<>();
+    private ArrayList<Bookmark> jsonToArrayList(JSONArray json) throws JSONException, MalformedURLException, ExecutionException, InterruptedException {
+        final ArrayList<Bookmark> list = new ArrayList<>();
 
         for (int i = 0; i < json.length(); i++) {
             JSONObject object = json.getJSONObject(i);
-            list.add(new Bookmark(object));
+            Bookmark bookmark = new Bookmark(object);
+            list.add(bookmark);
         }
         return list;
     }
